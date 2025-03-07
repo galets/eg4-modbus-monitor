@@ -5,4 +5,12 @@ specifically tested on 18kPv
 
 Collected data will be posted to MQTT server
 
+## Build requirements
+
+```bash
+apt install git build-essential libpaho-mqttpp-dev libpaho-mqtt-dev libjsoncpp-dev libmodbus-dev nodejs yq
+```
+
+## Configuration
+
 TODO
