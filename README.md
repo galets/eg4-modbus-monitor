@@ -11,6 +11,15 @@ Collected data will be posted to MQTT server
 apt install git build-essential libpaho-mqttpp-dev libpaho-mqtt-dev libjsoncpp-dev libmodbus-dev nodejs yq
 ```
 
+## Hardware
+
+This works with following hardware:
+
+- EG4 18kpv
+- Raspberry Pi Zero 2W
+- Following [RS485 USB dongle](https://www.amazon.com/dp/B081MB6PN2)
+- Powered by [12 to 5V converter](https://www.amazon.com/dp/B09TFLZMC2)
+
 ## Configuration
 
 TODO
