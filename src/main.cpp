@@ -6,11 +6,19 @@
 #include "mqtt.hpp"
 #include "hass.hpp"
 
+static std::string envOrDefault(const char* env, const std::string& defaultValue) {
+    const char* envValue = std::getenv(env);
+    if (envValue != nullptr) {
+        return envValue;
+    }
+    return defaultValue;
+}
+
 void getAndPost(Mqtt& mqtt) {
     static time_t lastMetadataUpdate = 0;
     const time_t secondsToForceMetadataUpdate = 60 * 60 * 2; // 2 hours
 
-    ModbusReader modbusReader("/dev/ttyUSB0", 19200, 'N', 8, 1, 1);
+    ModbusReader modbusReader(envOrDefault("MODBUS_PORT", "/dev/ttyUSB0"), 19200, 'N', 8, 1, 1);
     RegisterReader registersReader(modbusReader, RegisterType::INPUT);
     RegisterReader holdingRegistersReader(modbusReader, RegisterType::HOLDING);
     Registers r(registersReader, holdingRegistersReader);

@@ -24,8 +24,8 @@ public:
      * @param slave_id The Modbus slave ID.
      * @throws std::runtime_error if there's an error during initialization.
      */
-    ModbusReader(const char *device, int baud, char parity, int data_bits, int stop_bits, int slave_id)
-        : ctx_(modbus_new_rtu(device, baud, parity, data_bits, stop_bits))
+    ModbusReader(const std::string& device, int baud, char parity, int data_bits, int stop_bits, int slave_id)
+        : ctx_(modbus_new_rtu(device.c_str(), baud, parity, data_bits, stop_bits))
     {
         if (ctx_ == nullptr)
         {
@@ -48,8 +48,8 @@ public:
      * @param slave_id The Modbus slave ID.
      * @throws std::runtime_error if there's an error during initialization.
      */
-    ModbusReader(const char *ip_address, int port, int slave_id)
-        : ctx_(modbus_new_tcp(ip_address, port))
+    ModbusReader(const std::string& ip_address, int port, int slave_id)
+        : ctx_(modbus_new_tcp(ip_address.c_str(), port))
     {
         if (ctx_ == nullptr)
         {
