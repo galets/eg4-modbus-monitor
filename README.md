@@ -22,4 +22,13 @@ This works with following hardware:
 
 ## Configuration
 
-TODO
+Use environment variables to provide configuration. Example:
+
+```bash
+export MQTT_URI=tcp://localhost:1883
+export MQTT_USERNAME=
+export MQTT_PASSWORD=
+export MQTT_CLIENT_ID=modbus-local-reader
+export MODBUS_PORT=/dev/ttyUSB0
+build/modbus-local-reader
+```
