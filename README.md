@@ -17,7 +17,7 @@ This works with following hardware:
 
 - EG4 18kpv
 - Raspberry Pi Zero 2W
-- Following [RS485 USB dongle](https://www.amazon.com/dp/B081MB6PN2)
+- Following [RS485 USB dongle](https://www.amazon.com/dp/B081MB6PN2), or [even cheaper one](https://www.amazon.com/dp/B00NKAJGZM)
 - Powered by [12 to 5V converter](https://www.amazon.com/dp/B09TFLZMC2)
 
 ## Configuration
