@@ -3,6 +3,7 @@
 #include <cctype>
 #include <iomanip>
 #include <jsoncpp/json/json.h>
+#include "utils.hpp"
 #include "mqtt.hpp"
 #include "registers.hpp"
 
@@ -17,21 +18,13 @@ struct HassDevice {
     std::string identifier;
 
     HassDevice(const Registers& registers) {
-        manufacturer = envOrDefault("INVERTER_MANUFACTURER", "EG4");
-        model = envOrDefault("INVERTER_MODEL", "18kPv");
-        name = envOrDefault("INVERTER_NAME", manufacturer + " " + model + " Inverter");
+        manufacturer = envOrDefault("DEVICE_MANUFACTURER", "EG4");
+        model = envOrError("DEVICE_MODEL");
+        name = envOrDefault("DEVICE_NAME", manufacturer + " " + model + " Inverter");
         serial = registers.getSerial();
         sw_version = registers.getFwVersion();
         identifier = manufacturer + "_" + model + "_" + serial;
         std::transform(identifier.begin(), identifier.end(), identifier.begin(), [](unsigned char c) { return std::tolower(c); });
-    }
-
-    static std::string envOrDefault(const char* env, const std::string& defaultValue) {
-        const char* envValue = std::getenv(env);
-        if (envValue != nullptr) {
-            return envValue;
-        }
-        return defaultValue;
     }
 
     Json::Value toJson() const {
@@ -56,30 +49,20 @@ struct HassDevice {
     }
 };
 
-class HassInverter {
+class HassMqttDevice {
 public:
-    HassInverter(const Registers& registers, Mqtt& mqtt, const HassDevice& device) :
-        registers_(registers),
+    HassMqttDevice(Mqtt& mqtt, const HassDevice& device) :
         mqtt_(mqtt),
         device_(device) {
     }
 
-    Json::Value toJson() const {
-        Json::Value json;
-#include "register-json.inl"
-        return json;
-    }
+    virtual ~HassMqttDevice() = default;
+    virtual Json::Value toJson() const = 0;
+    virtual void postValues() const = 0;
+    virtual void postDiscovery() const = 0;
 
-    void postValues() const {
-#include "register-post.inl"
-    }
 
-    void postDiscovery() const {
-#include "register-discovery.inl"
-    }
-
-private:
-    const Registers& registers_;
+protected:
     Mqtt& mqtt_;
     const HassDevice& device_;
 
@@ -125,3 +108,54 @@ private:
         mqtt_.post(topic, value.toStyledString(), true);
     }
 };
+
+class HassInverterEg418kp: public HassMqttDevice {
+public:
+    HassInverterEg418kp(const RegistersEg418kpv& registers, Mqtt& mqtt, const HassDevice& device) :
+        HassMqttDevice(mqtt, device),
+        registers_(registers) {
+    }
+
+    Json::Value toJson() const {
+        Json::Value json;
+#include "../gen/eg4-18kpv/register-json.inl"
+        return json;
+    }
+
+    void postValues() const {
+#include "../gen/eg4-18kpv/register-post.inl"
+    }
+
+    void postDiscovery() const {
+#include "../gen/eg4-18kpv/register-discovery.inl"
+    }
+
+private:
+    const RegistersEg418kpv& registers_;
+};
+
+class HassGridBoss: public HassMqttDevice {
+    public:
+        HassGridBoss(const RegistersGridBoss& registers, Mqtt& mqtt, const HassDevice& device) :
+            HassMqttDevice(mqtt, device),
+            registers_(registers) {
+        }
+    
+        Json::Value toJson() const {
+            Json::Value json;
+    #include "../gen/eg4-gridboss/register-json.inl"
+            return json;
+        }
+    
+        void postValues() const {
+    #include "../gen/eg4-gridboss/register-post.inl"
+        }
+    
+        void postDiscovery() const {
+    #include "../gen/eg4-gridboss/register-discovery.inl"
+        }
+    
+    private:
+        const RegistersGridBoss& registers_;
+    };
+    

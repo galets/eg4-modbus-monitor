@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <mqtt/async_client.h>
+#include "utils.hpp"
 
 // requires libpaho-mqttpp-dev and libpaho-mqtt-dev
 
@@ -50,14 +51,6 @@ private:
         if (!client_.is_connected()) {
             client_.connect(connOpts_)->wait();
         }
-    }
-
-    static std::string envOrDefault(const char* env, const std::string& defaultValue) {
-        const char* envValue = std::getenv(env);
-        if (envValue != nullptr) {
-            return envValue;
-        }
-        return defaultValue;
     }
 };
 

@@ -6,16 +6,19 @@
 class Registers
 {
 public:
-    Registers(RegisterReader &reader, RegisterReader &holdingReader) 
+    Registers(const RegisterReader &reader, const RegisterReader &holdingReader) 
         : reader_(reader), holdingReader_(holdingReader) 
     {
     }
 
-#include "register-accessors.inl"
+    virtual ~Registers() = default;
 
-private:
-    RegisterReader &reader_;
-    RegisterReader &holdingReader_;
+    virtual std::string getSerial() const = 0;
+    virtual std::string getFwVersion() const = 0;
+
+protected:
+    const RegisterReader &reader_;
+    const RegisterReader &holdingReader_;
 
     uint16_t getRegister(int address) const { 
         return reader_.getRegister(address); 
@@ -42,5 +45,29 @@ private:
         }
         return ss.str();
     }
+
+};
+
+class RegistersEg418kpv: public Registers {
+public:
+    RegistersEg418kpv(const RegisterReader &reader, const RegisterReader &holdingReader) 
+        : Registers(reader, holdingReader) 
+    {
+    }
+
+
+#include "../gen/eg4-18kpv/register-accessors.inl"
+
+};
+
+class RegistersGridBoss: public Registers {
+public:
+    RegistersGridBoss(const RegisterReader &reader, const RegisterReader &holdingReader) 
+        : Registers(reader, holdingReader) 
+    {
+    }
+
+
+#include "../gen/eg4-gridboss/register-accessors.inl"
 
 };

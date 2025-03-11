@@ -1,0 +1,574 @@
+- item: State
+  type: string
+  icon: mdi:solar-power-variant-outline
+  description: Operation mode of off-grid-connected energy storage.
+  code: >
+    return "Online";
+- item: Serial
+  type: string
+  icon: mdi:card-text-outline
+  description: Unit serial number
+  code: >
+    return getHoldRegisterString({2, 3, 4, 5, 6});
+- item: FwVersion
+  type: string
+  icon: mdi:card-text-outline
+  description: Firmware Version
+  code: >
+    return getHoldRegisterString({7, 8});
+# - address: 1
+#   item: Vpv1
+#   unit: V
+#   multiply: 0.1
+#   range: 0-65535
+#   description: PV1 voltage, not available in AC energy storage systems.
+# - address: 2
+#   item: Vpv2
+#   unit: V
+#   multiply: 0.1
+#   range: 0-65535
+#   description: PV2 voltage, not available in AC energy storage systems.
+# - address: 3
+#   item: Vpv3
+#   unit: V
+#   multiply: 0.1
+#   range: 0-65536
+#   description: PV3 voltage, not available in AC energy storage systems.
+# - address: 4
+#   item: Vbat
+#   unit: V
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Battery voltage
+# - address: 5
+#   item: SOH
+#   unit: '%'
+#   device_class: battery
+#   icon: mdi:battery-50
+#   range: 0-100
+#   description: Battery state of health
+#   type: int
+#   code: >
+#     return getRegister(5) >> 8;
+# - address: 5
+#   item: SOC
+#   unit: '%'
+#   device_class: battery
+#   icon: mdi:battery-50
+#   range: 0-100
+#   description: Battery capacity
+#   type: int
+#   code: >
+#     return getRegister(5) & 0xFF;
+# - address: 7
+#   item: Ppv1
+#   unit: W
+#   range: 0-65535
+#   description: PV1 power/AC energy storage Ppv
+# - address: 8
+#   item: Ppv2
+#   unit: W
+#   range: 0-65535
+#   description: PV2 power, not available in AC energy storage systems
+# - address: 9
+#   item: Ppv3
+#   unit: W
+#   range: 0-65536
+#   description: PV3 power not available in AC energy storage systems
+# - item: Ppv
+#   unit: W
+#   description: Total PV power (PV1 + PV2 + PV3)
+#   code: >
+#     return getPpv1() + getPpv2() + getPpv3();
+# - address: 10
+#   item: Pcharge
+#   unit: W
+#   range: 0-65535
+#   description: Charging power (power flowing into the battery)
+# - address: 11
+#   item: Pdischarge
+#   unit: W
+#   range: 0-65535
+#   description: Discharging power (power flowing out of battery)
+# # - address: 12
+# #   item: VacR
+# #   unit: V
+# #   multiply: 0.1
+# #   range: 0-65535
+# #   description: R-phase utility grid voltage
+# # - address: 13
+# #   item: VacS
+# #   unit: V
+# #   multiply: 0.1
+# #   range: 0-65535
+# #   description: S-phase utility grid voltage
+# # - address: 14
+# #   item: VacT
+# #   unit: V
+# #   multiply: 0.1
+# #   range: 0-65535
+# #   description: T-phase utility grid voltage
+# - address: 15
+#   item: Fac
+#   unit: Hz
+#   multiply: 0.01
+#   range: 0-65535
+#   description: Utility grid frequency
+# - address: 16
+#   item: Pinv
+#   unit: W
+#   range: 0-65535
+#   description: 'On-grid inverter power (For three phase: R phase)'
+# - address: 17
+#   item: Prec
+#   unit: W
+#   range: 0-65535
+#   description: 'AC charging rectification power (For three phase: R phase)'
+# - address: 18
+#   item: IinvRMS
+#   unit: A
+#   multiply: 0.01
+#   range: 0-65535
+#   description: 'Inverter rms current output (For three phase: R phase)'
+# - address: 19
+#   item: PF
+#   icon: mdi:power
+#   multiply: 0.001
+#   range: 0-2000
+#   description: 'Power factor: x≤1000 -> x/1000, x>1000 -> (1000-x)/1000'
+# # - address: 20
+# #   item: VepsR
+# #   unit: V
+# #   multiply: 0.1
+# #   range: 0-65535
+# #   description: R phase off-grid output voltage
+# # - address: 21
+# #   item: VepsS
+# #   unit: V
+# #   multiply: 0.1
+# #   range: 0-65535
+# #   description: S phase off-grid output voltage
+# # - address: 22
+# #   item: VepsT
+# #   unit: V
+# #   multiply: 0.1
+# #   range: 0-65535
+# #   description: T phase off-grid output voltage
+# # - address: 23
+# #   item: Feps
+# #   unit: Hz
+# #   multiply: 0.01
+# #   range: 0-65535
+# #   description: Off-grid output frequency
+# - address: 24
+#   item: Peps
+#   unit: W
+#   range: 0-65535
+#   description: 'Off-grid inverter power (For three phase: R phase)'
+# - address: 25
+#   item: Seps
+#   unit: VA
+#   range: 0-65535
+#   description: 'Off-grid apparent power (For three phase: R phase)'
+# - address: 26
+#   item: Ptogrid
+#   unit: W
+#   range: 0-65535
+#   description: 'User on-grid power (For three phase: R phase)'
+# - address: 27
+#   item: Ptouser
+#   unit: W
+#   range: 0-65535
+#   description: 'Grid power capacity (For three phase: R phase)'
+# - address: 28
+#   item: Epv1_day
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: PV1 power generation today / AC Energy Storage Epv_day
+# - address: 29
+#   item: Epv2_day
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: PV2 power generation today, not available in AC energy storage systems
+# - address: 30
+#   item: Epv3_day
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: PV3 power generation today not available in AC energy storage systems
+# - item: Epv_day
+#   unit: kWh
+#   description: Total power generation today (PV1 + PV2 + PV3)
+#   code: >
+#     return getEpv1_day() + getEpv2_day() + getEpv3_day();
+# - address: 31
+#   item: Einv_day
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Today's on-grid inverter output energy
+# - address: 32
+#   item: Erec_day
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Today's AC charging rectifier energy
+# - address: 33
+#   item: Echg_day
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Energy Charge today
+# - address: 34
+#   item: Edischg_day
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Energy Discharge today
+# - address: 35
+#   item: Eeps_day
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Today's off-grid output energy
+# - address: 36
+#   item: Etogrid_day
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Today's export to grid energy
+# - address: 37
+#   item: Etouser_day
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Electricity supplied to user from the grid today
+# - address: 38
+#   item: Vbus1
+#   unit: V
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Voltage of Bus 1
+# - address: 39
+#   item: Vbus2
+#   unit: V
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Voltage of Bus 2
+# - address: 40
+#   item: Epv1_all
+#   doubleSize: true
+#   unit: kWh
+#   state_class: total_increasing
+#   multiply: 0.1
+#   range: 0-65535
+#   description: PV1 cumulative power generation
+# - address: 42
+#   item: Epv2_all
+#   doubleSize: true
+#   unit: kWh
+#   state_class: total_increasing
+#   multiply: 0.1
+#   range: 0-65535
+#   description: PV2 cumulative power generation
+# - address: 44
+#   item: Epv3_all
+#   doubleSize: true
+#   unit: kWh
+#   state_class: total_increasing
+#   multiply: 0.1
+#   range: 0-65535
+#   description: PV3 cumulative power generation
+# - item: Epv_all
+#   unit: kWh
+#   state_class: total_increasing
+#   description: Total power generation today (PV1 + PV2 + PV3)
+#   code: >
+#     return getEpv1_all() + getEpv2_all() + getEpv3_all();
+# - address: 46
+#   item: Einv_all
+#   state_class: total_increasing
+#   doubleSize: true
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Inverter output accumulated power
+# - address: 48
+#   item: Erec_all
+#   state_class: total_increasing
+#   doubleSize: true
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: AC charging accumulated rectified power
+# - address: 50
+#   item: Echg_all
+#   state_class: total_increasing
+#   doubleSize: true
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Cumulative charge energy
+# - address: 52
+#   item: Edischg_all
+#   state_class: total_increasing
+#   doubleSize: true
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Cumulative discharge energy
+# - address: 54
+#   item: Eeps_all
+#   state_class: total_increasing
+#   doubleSize: true
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Cumulative inverter off-grid output energy
+# - address: 56
+#   item: Etogrid_all
+#   state_class: total_increasing
+#   doubleSize: true
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Accumulate export energy
+# - address: 58
+#   item: Etouser_all
+#   state_class: total_increasing
+#   doubleSize: true
+#   unit: kWh
+#   multiply: 0.1
+#   range: 0-65535
+#   description: Cumulative import energy
+# - address: 60
+#   item: FaultCode
+#   icon: mdi:alert
+#   doubleSize: true
+#   range: 0-65535
+#   type: int32
+#   description: Fault code
+# - address: 62
+#   item: WarningCode
+#   icon: mdi:alert
+#   entity_category: diagnostic
+#   doubleSize: true
+#   type: int32
+#   range: 0-65535
+#   description: Warning code low byte
+# - address: 64
+#   item: Tinner
+#   unit: °C
+#   type: int
+#   range: 0-65535
+#   description: Internal temperature
+# - address: 65
+#   item: Tradiator1
+#   unit: °C
+#   type: int
+#   range: 0-65535
+#   description: Radiator temperature 1
+# - address: 66
+#   item: Tradiator2
+#   unit: °C
+#   type: int
+#   range: 0-65535
+#   description: Radiator temperature 2
+# - address: 67
+#   item: Tbat
+#   unit: °C
+#   type: int
+#   range: 0-65535
+#   description: Battery temperature
+# - address: 69
+#   item: RunningTime
+#   doubleSize: true
+#   unit: s
+#   type: int32
+#   range: 0-65535
+#   description: Runtime duration low byte
+# # - address: 71
+# #   item: AutoTestStart
+# #   range: 0-1
+# #   description: 'Auto test status (Bit0-3): 0=not started, 1=started'
+# # - address: 71
+# #   item: UbAutoTestStatus
+# #   range: 0-5
+# #   description: 'Test status (Bit4-7): 0=waiting, 1=testing, 2=test fail, 3=V test
+# #     OK, 4=F test OK, 5=test pass'
+# # - address: 71
+# #   item: UbAutoTestStep
+# #   range: 1-8
+# #   description: 'Test step (Bit8-11): 1=V1L, 2=V1H, 3=F1L, 4=F1H, 5=V2L, 6=V2H, 7=F2L,
+# #     8=F2H'
+# # - address: 72
+# #   item: wAutoTestLimit
+# #   unit: V/Hz
+# #   multiply: 0.1/0.01
+# #   range: 0-65535
+# #   description: Voltage/frequency limit depending on test step
+# # - address: 73
+# #   item: uwAutoTestDefaultTime
+# #   unit: ms
+# #   range: 0-65535
+# #   description: Auto test default time
+# # - address: 74
+# #   item: uwAutoTestTripValue
+# #   unit: V/Hz
+# #   multiply: 0.1/0.01
+# #   range: 0-65535
+# #   description: Trip value for voltage/frequency depending on test step
+# # - address: 75
+# #   item: uwAutoTestTripTime
+# #   unit: ms
+# #   range: 0-65535
+# #   description: Auto test trip time
+# # - address: 77
+# #   item: ACInputType
+# #   range: 0-1
+# #   description: 'AC input type (Bit0): 0=Grid, 1=Generator for 12KHybrid'
+# # - address: 77
+# #   item: ACCoupleInverterFlow
+# #   range: 0-1
+# #   description: 'AC couple inverter flow (Bit1): 0=no flow, 1=show flow'
+# # - address: 77
+# #   item: ACCoupleEn
+# #   range: 0-1
+# #   description: 'AC couple enable (Bit2): 0=Disable, 1=Enable'
+# # - address: 80
+# #   item: BatTypeAndBrand
+# #   description: Battery type and brand information
+# # - address: 80
+# #   item: BatComType
+# #   range: 0-1
+# #   description: 'Battery communication type: 0=CAN, 1=485'
+# # - address: 81
+# #   item: MaxChgCurr
+# #   unit: A
+# #   multiply: 0.01
+# #   description: The maximum charging current of BMS limits
+# # - address: 82
+# #   item: MaxDischgCurr
+# #   unit: A
+# #   multiply: 0.01
+# #   description: The maximum discharging current of BMS limits
+# # - address: 83
+# #   item: ChargeVoltRef
+# #   unit: V
+# #   multiply: 0.1
+# #   description: Recommends charging voltage by BMS
+# # - address: 84
+# #   item: DischgCutVolt
+# #   unit: V
+# #   multiply: 0.1
+# #   description: Recommends a discharging cut-off voltage by BMS
+# # - address: 85
+# #   item: BatStatus0_BMS
+# #   description: Status information of BMS
+# # - address: 86
+# #   item: BatStatus1_BMS
+# #   description: Status information of BMS
+# # - address: 87
+# #   item: BatStatus2_BMS
+# #   description: Status information of BMS
+# # - address: 88
+# #   item: BatStatus3_BMS
+# #   description: Status information of BMS
+# # - address: 89
+# #   item: BatStatus4_BMS
+# #   description: Status information of BMS
+# # - address: 90
+# #   item: BatStatus5_BMS
+# #   description: Status information of BMS
+# # - address: 91
+# #   item: BatStatus6_BMS
+# #   description: Status information of BMS
+# # - address: 92
+# #   item: BatStatus7_BMS
+# #   description: Status information of BMS
+# # - address: 93
+# #   item: BatStatus8_BMS
+# #   description: Status information of BMS
+# # - address: 94
+# #   item: BatStatus9_BMS
+# #   description: Status information of BMS
+# # - address: 95
+# #   item: BatStatus_INV
+# #   description: The inverter aggregates lithium battery status information
+# # - address: 96
+# #   item: BatParallelNum
+# #   description: Number of batteries in parallel
+# # - address: 97
+# #   item: BatCapacity
+# #   unit: Ah
+# #   description: Battery capacity
+# # - address: 98
+# #   item: BatCurrent_BMS
+# #   unit: A
+# #   multiply: 0.01
+# #   description: Battery current, with signed number
+# # - address: 99
+# #   item: FaultCode_BMS
+# #   description: BMS fault code
+# # - address: 100
+# #   item: WarningCode_BMS
+# #   description: BMS warning code
+# # - address: 101
+# #   item: MaxCellVolt_BMS
+# #   unit: V
+# #   multiply: 0.001
+# #   description: Maximum voltage of cell
+# # - address: 102
+# #   item: MinCellVolt_BMS
+# #   unit: V
+# #   multiply: 0.001
+# #   description: Minimum voltage of cell
+# # - address: 103
+# #   item: MaxCellTemp_BMS
+# #   unit: °C
+# #   multiply: 0.1
+# #   description: Maximum temperature of cell, with signed number
+# # - address: 104
+# #   item: MinCellTemp_BMS
+# #   unit: °C
+# #   multiply: 0.1
+# #   description: Minimum temperature of cell, with signed number
+# # - address: 105
+# #   item: BMSFWUpdateState
+# #   range: 1-3
+# #   description: 1=Upgrade in process, 2=Upgrade successful, 3=Upgrade failed
+# # - address: 106
+# #   item: CycleCnt_BMS
+# #   description: Number of charging/discharging cycles
+# # - address: 107
+# #   item: BatVoltSample_INV
+# #   unit: V
+# #   multiply: 0.1
+# #   description: Inverter samples the battery voltage
+# # - address: 108
+# #   item: T1
+# #   unit: °C
+# #   multiply: 0.1
+# #   description: BT temperature for 12k
+# # - address: 109
+# #   item: T2
+# #   unit: °C
+# #   multiply: 0.1
+# #   description: Reserved
+# # - address: 110
+# #   item: T3
+# #   unit: °C
+# #   multiply: 0.1
+# #   description: Reserved
+# # - address: 111
+# #   item: T4
+# #   unit: °C
+# #   multiply: 0.1
+# #   description: Reserved
+# # - address: 112
+# #   item: T5
+# #   unit: °C
+# #   multiply: 0.1
+# #   description: Reserved
