@@ -16,18 +16,45 @@
   description: Firmware Version
   code: >
     return getHoldRegisterString({7, 8});
-# - address: 1
-#   item: Vpv1
-#   unit: V
-#   multiply: 0.1
-#   range: 0-65535
-#   description: PV1 voltage, not available in AC energy storage systems.
-# - address: 2
-#   item: Vpv2
-#   unit: V
-#   multiply: 0.1
-#   range: 0-65535
-#   description: PV2 voltage, not available in AC energy storage systems.
+- address: 1
+  item: V1
+  unit: V
+  multiply: 0.1
+  range: 0-65535
+  description: Some voltage
+- address: 2
+  item: V2
+  unit: V
+  multiply: 0.1
+  range: 0-65535
+  description: Also some
+
+- address: 4
+  item: Vp1
+  unit: V
+  multiply: 0.1
+  range: 0-65535
+  description: Some phase voltage
+- address: 5
+  item: Vp2
+  unit: V
+  multiply: 0.1
+  range: 0-65535
+  description: Also some phase voltage
+- address: 6
+  item: Vp3
+  unit: V
+  multiply: 0.1
+  range: 0-65535
+  description: Some phase voltage
+- address: 7
+  item: Vp4
+  unit: V
+  multiply: 0.1
+  range: 0-65535
+  description: Also some phase voltage
+
+
 # - address: 3
 #   item: Vpv3
 #   unit: V
