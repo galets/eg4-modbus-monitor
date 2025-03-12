@@ -33,5 +33,5 @@ export MODBUS_PORT=/dev/ttyUSB0
 export DEVICE_MANUFACTURER=EG4
 export DEVICE_MODEL=18kpv
 export DEVICE_NAME="EG4 18kpv Inverter"
-build/modbus-local-reader
+build/eg4-18kpv-reader
 ```
