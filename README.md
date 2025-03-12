@@ -20,6 +20,8 @@ This works with following hardware:
 - Following [RS485 USB dongle](https://www.amazon.com/dp/B081MB6PN2), or [even cheaper one](https://www.amazon.com/dp/B00NKAJGZM)
 - Powered by [12 to 5V converter](https://www.amazon.com/dp/B09TFLZMC2)
 
+**Note:** there is an effort to also support GridBOSS, but it is currently in the early stage
+
 ## Configuration
 
 Use environment variables to provide configuration. Example:

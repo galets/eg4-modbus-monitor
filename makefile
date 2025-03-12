@@ -1,7 +1,11 @@
 
 
-all: build/eg4-18kpv-reader build/gridboss-reader
-.PHONY: all
+all: build/eg4-18kpv-reader
+18kpv: build/eg4-18kpv-reader
+gridboss: build/gridboss-reader
+tests: build/tests
+
+.PHONY: all eg4-18kpv gridboss tests
 
 gen/eg4-18kpv/register-accessors.inl: src/registers-eg4-18kpv.yaml
 	bin/run_generator.sh eg4-18kpv generate-accessors.js register-accessors.inl
@@ -58,4 +62,4 @@ build/tests: tests/main.cpp src/registerReader.hpp src/registers.hpp \
 		gen/eg4-gridboss/register-accessors.inl gen/eg4-gridboss/register-dump.inl gen/eg4-gridboss/register-json.inl \
 		gen/eg4-gridboss/register-post.inl gen/eg4-gridboss/register-discovery.inl
 	mkdir -p build
-	g++ -DGRIDBOSS=1 -std=c++20 tests/main.cpp -lmodbus -ljsoncpp -lpaho-mqttpp3 -lpaho-mqtt3a -lpaho-mqtt3as -o build/tests
+	g++ -std=c++20 tests/main.cpp -lmodbus -ljsoncpp -lpaho-mqttpp3 -lpaho-mqtt3a -lpaho-mqtt3as -o build/tests
