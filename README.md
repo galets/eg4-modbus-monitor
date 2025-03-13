@@ -20,7 +20,7 @@ make gridboss
 This works with following hardware:
 
 - EG4 18kpv
-- EG4 GridBOSS (early alpha code, please report bugs)
+- EG4 GridBOSS (early alpha code, please report bugs). See some notes [here](doc/gridBoss.md)
 - Raspberry Pi Zero 2W
 - Following [RS485 USB dongle](https://www.amazon.com/dp/B081MB6PN2), or [even cheaper one](https://www.amazon.com/dp/B00NKAJGZM)
 - Powered by [12 to 5V converter](https://www.amazon.com/dp/B09TFLZMC2)
