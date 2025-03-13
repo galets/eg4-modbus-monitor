@@ -51,7 +51,7 @@ struct HassDevice {
 
 class HassMqttDevice {
 public:
-    HassMqttDevice(Mqtt& mqtt, const HassDevice& device) :
+    HassMqttDevice(MqttInterface& mqtt, const HassDevice& device) :
         mqtt_(mqtt),
         device_(device) {
     }
@@ -63,7 +63,7 @@ public:
 
 
 protected:
-    Mqtt& mqtt_;
+    MqttInterface& mqtt_;
     const HassDevice& device_;
 
     std::string getTopic(const std::string& name) const {
@@ -111,7 +111,7 @@ protected:
 
 class HassInverterEg418kp: public HassMqttDevice {
 public:
-    HassInverterEg418kp(const RegistersEg418kpv& registers, Mqtt& mqtt, const HassDevice& device) :
+    HassInverterEg418kp(const RegistersEg418kpv& registers, MqttInterface& mqtt, const HassDevice& device) :
         HassMqttDevice(mqtt, device),
         registers_(registers) {
     }
@@ -136,7 +136,7 @@ private:
 
 class HassGridBoss: public HassMqttDevice {
     public:
-        HassGridBoss(const RegistersGridBoss& registers, Mqtt& mqtt, const HassDevice& device) :
+        HassGridBoss(const RegistersGridBoss& registers, MqttInterface& mqtt, const HassDevice& device) :
             HassMqttDevice(mqtt, device),
             registers_(registers) {
         }

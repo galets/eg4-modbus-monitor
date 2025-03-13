@@ -6,7 +6,7 @@
 
 class RegisterReader {
 public:
-  RegisterReader(ModbusReader &reader, RegisterType type) : reader_(reader), type_(type) {
+  RegisterReader(ModbusReaderInterface &reader, RegisterType type) : reader_(reader), type_(type) {
     dropCaches();
   }
 
@@ -36,11 +36,11 @@ public:
     return cache_[cacheIndex][offset];
   }
 
-private:
+protected:
   static const int CACHE_SEGMENT_SIZE = 40;
   static const int CACHE_SIZE = 10;
 
-  ModbusReader &reader_;
+  ModbusReaderInterface &reader_;
   RegisterType type_;
   mutable std::map<int, std::vector<uint16_t>> cache_;
 

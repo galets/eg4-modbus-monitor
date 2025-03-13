@@ -7,7 +7,13 @@
 
 // requires libpaho-mqttpp-dev and libpaho-mqtt-dev
 
-class Mqtt {
+class MqttInterface {
+public:
+    virtual ~MqttInterface() = default;
+    virtual void post(const std::string& topic, const std::string& value, bool retain = false) = 0;
+};
+
+class Mqtt: public MqttInterface {
   
 public:
     Mqtt() : Mqtt(envOrDefault("MQTT_URI", "tcp://localhost:1883"),

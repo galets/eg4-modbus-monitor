@@ -62,4 +62,5 @@ build/tests: tests/main.cpp src/registerReader.hpp src/registers.hpp \
 		gen/eg4-gridboss/register-accessors.inl gen/eg4-gridboss/register-dump.inl gen/eg4-gridboss/register-json.inl \
 		gen/eg4-gridboss/register-post.inl gen/eg4-gridboss/register-discovery.inl
 	mkdir -p build
-	g++ -std=c++20 tests/main.cpp -lmodbus -ljsoncpp -lpaho-mqttpp3 -lpaho-mqtt3a -lpaho-mqtt3as -o build/tests
+	g++ -std=c++20 tests/main.cpp -lmodbus -ljsoncpp -lpaho-mqttpp3 -lpaho-mqtt3a -lpaho-mqtt3as -lgtest -lgtest_main -o build/tests
+

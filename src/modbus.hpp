@@ -10,7 +10,14 @@ enum class RegisterType {
     HOLDING
 };
 
-class ModbusReader
+class ModbusReaderInterface {
+public:
+    virtual ~ModbusReaderInterface() = default;
+    virtual bool isValid() const = 0;
+    virtual std::vector<uint16_t> readRegisters(RegisterType type, int start_address, int num_registers) const = 0;
+};
+
+class ModbusReader: public ModbusReaderInterface
 {
 public:
     /**
@@ -86,7 +93,7 @@ public:
      * @return std::vector<uint16_t> A vector containing the register values.
      * @throws std::runtime_error if there's an error during the read operation.
      */
-    std::vector<uint16_t> readRegisters(RegisterType type, int start_address, int num_registers)
+    std::vector<uint16_t> readRegisters(RegisterType type, int start_address, int num_registers) const
     {
         checkValid();
 
@@ -116,7 +123,7 @@ public:
      * @return true If the connection is valid.
      * @return false otherwise
      */
-    bool isValid()
+    bool isValid() const
     {
         return ctx_ != nullptr;
     }
@@ -124,7 +131,7 @@ public:
 private:
     modbus_t *ctx_;
 
-    void checkValid()
+    void checkValid() const
     {
         if (ctx_ == nullptr)
         {
