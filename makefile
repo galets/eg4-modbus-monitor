@@ -1,6 +1,6 @@
 
 
-all: build/eg4-18kpv-reader
+all: 18kpv gridboss
 18kpv: build/eg4-18kpv-reader
 gridboss: build/gridboss-reader
 tests: build/tests
