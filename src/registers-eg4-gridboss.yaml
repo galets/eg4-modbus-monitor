@@ -235,111 +235,137 @@
 - item: eACcouple4TodayL2
   unit: kWh
   description: AC couple 4 energy today L2
-# --- ONE BYTE SKEW!!!
+
 - address: 68
   item: eLoadTotalL1 
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total load energy L1
 - item: eLoadTotalL2
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total load energy L2
 - item: eUpsTotalL1
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total UPS energy L1
 - item: eUpsTotalL2
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total UPS energy L2
 - address: 76
   item: eToGridTotalL1
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total energy to grid L1
 - item: eToGridTotalL2
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total energy to grid L2
 - item: eToUserTotalL1
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total energy to user L1
 - item: eToUserTotalL2
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total energy to user L2
 - item: eGenTotalL1
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total energy Generator L1
 - item: eGenTotalL2
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total energy Generator L2
 - item: eSmartLoad1TotalL1
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 1 energy L1
 - item: eSmartLoad1TotalL2
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 1 energy L2
 - item: eSmartLoad2TotalL1
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 2 energy L1
 - item: eSmartLoad2TotalL2
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 2 energy L2
 - item: eSmartLoad3TotalL1
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 3 energy L1
 - item: eSmartLoad3TotalL2
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 3 energy L2
 - item: eSmartLoad4TotalL1
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 4 energy L1
 - item: eSmartLoad4TotalL2
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 4 energy L2
 - item: eACcouple1TotalL1
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total AC couple 1 energy L1
 - item: eACcouple1TotalL2
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total AC couple 1 energy L2
 - item: eACcouple2TotalL1
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total AC couple 2 energy L1
 - item: eACcouple2TotalL2
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total AC couple 2 energy L2
 - item: eACcouple3TotalL1
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total AC couple 3 energy L1
 - item: eACcouple3TotalL2
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total AC couple 3 energy L2
 - item: eACcouple4TotalL1
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total AC couple 4 energy L1
 - item: eACcouple4TotalL2
   unit: kWh
+  state_class: total_increasing
   doubleSize: true
   description: Total AC couple 4 energy L2
 - address: 128
