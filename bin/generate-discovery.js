@@ -21,6 +21,7 @@ for (let i=0; i<registers.length; i++) {
         (unit == "°C") ? "temperature" :
         "";
     let state_class = reg.state_class ? reg.state_class : ""
+    let enabled_by_default = reg.enabled_by_default === undefined ? true : reg.enabled_by_default;
 
-    console.log(`postDiscoveryEntry("${name}", "${icon}", "${entity_category}", "${unit}", "${device_class}", "${state_class}");`);
+    console.log(`postDiscoveryEntry("${name}", "${icon}", "${entity_category}", "${unit}", "${device_class}", "${state_class}", ${enabled_by_default});`);
 }

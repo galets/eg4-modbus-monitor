@@ -80,7 +80,8 @@ protected:
     }
 
     void postDiscoveryEntry(const std::string& name, const std::string& icon, const std::string& entity_category, 
-            const std::string& unit_of_measurement, const std::string& device_class, const std::string& state_class) const {
+            const std::string& unit_of_measurement, const std::string& device_class, const std::string& state_class,
+            bool enabled_by_default) const {
         Json::Value value;
         value["component"] = "sensor";
         value["device"] = (name == "State")? device_.toJson(): device_.toReducedJson();
@@ -102,6 +103,9 @@ protected:
             value["state_class"] = state_class;
         }
         value["state_topic"] = getTopic(name);
+        if (!enabled_by_default) {
+            value["enabled_by_default"] = false;
+        }
 
         auto topic = "homeassistant/sensor/" + device_.identifier + "/" + name + "/config";
         //std::cout << "posting metadata to: " << topic << std::endl;

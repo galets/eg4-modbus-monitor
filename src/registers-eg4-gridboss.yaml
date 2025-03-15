@@ -88,27 +88,35 @@
   description: UPS L2 current
 - item: smartLoad1L1RmsCurr
   unit: A
+  enabled_by_default: false
   description: Smart Load 1 L1 current
 - item: smartLoad1L2RmsCurr
   unit: A
+  enabled_by_default: false
   description: Smart Load 1 L2 current
 - item: smartLoad2L1RmsCurr
   unit: A
+  enabled_by_default: false
   description: Smart Load 2 L1 current
 - item: smartLoad2L2RmsCurr
   unit: A
+  enabled_by_default: false
   description: Smart Load 2 L2 current
 - item: smartLoad3L1RmsCurr
   unit: A
+  enabled_by_default: false
   description: Smart Load 3 L1 current
 - item: smartLoad3L2RmsCurr
   unit: A
+  enabled_by_default: false
   description: Smart Load 3 L2 current
 - item: smartLoad4L1RmsCurr
   unit: A
+  enabled_by_default: false
   description: Smart Load 4 L1 current
 - item: smartLoad4L2RmsCurr
   unit: A
+  enabled_by_default: false
   description: Smart Load 4 L2 current
 - address: 26
   item: gridL1ActivePower
@@ -138,28 +146,36 @@
   description: UPS L2 active power
 - item: smartLoad1L1ActivePower
   unit: W
+  enabled_by_default: false
   description: Smart Load 1 L1 active power
 - item: smartLoad1L2ActivePower
   unit: W
+  enabled_by_default: false
   multiply: 1
   description: Smart Load 1 L2 active power
 - item: smartLoad2L1ActivePower
   unit: W
+  enabled_by_default: false
   description: Smart Load 2 L1 active power
 - item: smartLoad2L2ActivePower
   unit: W
+  enabled_by_default: false
   description: Smart Load 2 L2 active power
 - item: smartLoad3L1ActivePower
   unit: W
+  enabled_by_default: false
   description: Smart Load 3 L1 active power
 - item: smartLoad3L2ActivePower
   unit: W
+  enabled_by_default: false
   description: Smart Load 3 L2 active power
 - item: smartLoad4L1ActivePower
   unit: W
+  enabled_by_default: false
   description: Smart Load 4 L1 active power
 - item: smartLoad4L2ActivePower
   unit: W
+  enabled_by_default: false
   description: Smart Load 4 L2 active power
 
 - address: 42
@@ -189,53 +205,68 @@
   description: Energy Generator
 - item: eSmartLoad1TodayL1
   unit: kWh
+  enabled_by_default: false
   description: Smart Load 1 energy today L1
 - item: eSmartLoad1TodayL2
   unit: kWh
+  enabled_by_default: false
   description: Smart Load 1 energy today L2
 - item: eSmartLoad2TodayL1
   unit: kWh
+  enabled_by_default: false
   description: Smart Load 2 energy today L1
 - item: eSmartLoad2TodayL2
   unit: kWh
+  enabled_by_default: false
   description: Smart Load 2 energy today L2
 - item: eSmartLoad3TodayL1
   unit: kWh
+  enabled_by_default: false
   description: Smart Load 3 energy today L1
 - item: eSmartLoad3TodayL2
   unit: kWh
+  enabled_by_default: false
   description: Smart Load 3 energy today L2
 - item: eSmartLoad4TodayL1
   unit: kWh
+  enabled_by_default: false
   description: Smart Load 4 energy today L1
 - item: eSmartLoad4TodayL2
   unit: kWh
+  enabled_by_default: false
   description: Smart Load 4 energy today L2
 - item: eACcouple1TodayL1
   unit: kWh
+  enabled_by_default: false
   description: AC couple 1 energy today L1
 - item: eACcouple1TodayL2
   unit: kWh
+  enabled_by_default: false
   description: AC couple 1 energy today L2
 - item: eACcouple2TodayL1
   unit: kWh
+  enabled_by_default: false
   description: AC couple 2 energy today L1
 - item: eACcouple2TodayL2
   unit: kWh
+  enabled_by_default: false
   description: AC couple 2 energy today L2
 - item: eACcouple3TodayL1
   unit: kWh
+  enabled_by_default: false
   description: AC couple 3 energy today L1
 - item: eACcouple3TodayL2
   unit: kWh
+  enabled_by_default: false
   description: AC couple 3 energy today L2
 - item: eACcouple4TodayL1
   unit: kWh
+  enabled_by_default: false
   description: AC couple 4 energy today L1
 - item: eACcouple4TodayL2
   unit: kWh
+  enabled_by_default: false
   description: AC couple 4 energy today L2
-
 - address: 68
   item: eLoadTotalL1 
   unit: kWh
@@ -295,76 +326,91 @@
   description: Total Smart Load 1 energy L1
 - item: eSmartLoad1TotalL2
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 1 energy L2
 - item: eSmartLoad2TotalL1
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 2 energy L1
 - item: eSmartLoad2TotalL2
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 2 energy L2
 - item: eSmartLoad3TotalL1
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 3 energy L1
 - item: eSmartLoad3TotalL2
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 3 energy L2
 - item: eSmartLoad4TotalL1
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 4 energy L1
 - item: eSmartLoad4TotalL2
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total Smart Load 4 energy L2
 - item: eACcouple1TotalL1
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total AC couple 1 energy L1
 - item: eACcouple1TotalL2
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total AC couple 1 energy L2
 - item: eACcouple2TotalL1
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total AC couple 2 energy L1
 - item: eACcouple2TotalL2
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total AC couple 2 energy L2
 - item: eACcouple3TotalL1
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total AC couple 3 energy L1
 - item: eACcouple3TotalL2
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total AC couple 3 energy L2
 - item: eACcouple4TotalL1
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total AC couple 4 energy L1
 - item: eACcouple4TotalL2
   unit: kWh
+  enabled_by_default: false
   state_class: total_increasing
   doubleSize: true
   description: Total AC couple 4 energy L2
