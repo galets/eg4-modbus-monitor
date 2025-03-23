@@ -3,4 +3,13 @@
 set -e
 
 mkdir -p gen/$1
-node bin/$2 "$(yq <src/registers-$1.yaml)" >gen/$1/$3
+json="$(yq <src/registers-$1.yaml)"
+if [ "${json:0:1}" != '[' ] ; then
+    echo "wrong yq tool used. Use https://github.com/kislyuk/yq"
+    echo "Install using:"
+    echo "   apt install yq"
+    echo "or:"
+    echo "   pip install yq"
+    exit 1
+fi
+node bin/$2 "$json" >gen/$1/$3
