@@ -8,11 +8,7 @@ for (let i=0; i<registers.length; i++) {
     let name = reg.item;
     let address = reg.address ? reg.address : (prevAddress + 1);
     prevAddress = address;
-    let valueGetter = `getRegister(${address})`;
-    if (reg.doubleSize) {
-        valueGetter = `(getRegister(${address}) + getRegister(${address+1}) * 0x10000)`;
-        prevAddress++;
-    }
+
     let unit = reg.unit ? reg.unit : "";
     let multiply = reg.multiply ? reg.multiply : 
         (unit == "V") ? 0.1 :
@@ -22,6 +18,19 @@ for (let i=0; i<registers.length; i++) {
         (unit == "kWh") ? 0.1 :
         (unit == "Hz") ? 0.01 :
         1;
+
+    let signed = reg.signed !== undefined ? reg.signed :
+        (unit == "W") ? true :
+        false;
+
+    let valueGetter = signed ? `static_cast<int16_t>(getRegister(${address}))` : `getRegister(${address})`;
+    if (reg.doubleSize) {
+        valueGetter = `(getRegister(${address}) + getRegister(${address+1}) * 0x10000)`;
+        if (signed) {
+            valueGetter = `static_cast<int32_t>(${valueGetter})`;
+        }
+        prevAddress++;
+    }
 
     console.log("/**");
     console.log(`* @brief ${reg.description}`)
