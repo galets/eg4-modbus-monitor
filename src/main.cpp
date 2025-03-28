@@ -6,7 +6,7 @@
 #include "mqtt.hpp"
 #include "hass.hpp"
 #include "utils.hpp"
-
+#include "../gen/version.h"
 
 void getAndPost(Mqtt& mqtt) {
     static time_t lastMetadataUpdate = 0;
@@ -40,6 +40,8 @@ void getAndPost(Mqtt& mqtt) {
 
 int main()
 {
+    std::cerr << "EG4 Modbus Monitor " << APP_VERSION << "." << APP_GIT_HASH << std::endl;
+
     try {
         Mqtt mqtt;
         while (true) {
