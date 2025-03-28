@@ -4,7 +4,7 @@
 #include <chrono>
 #include <thread>
 #include "../src/modbus.hpp"
-#include "../src/registerReader.hpp"
+#include "../src/modbusDeviceManager.hpp"
 #include "../src/registers.hpp"
 #include "../src/mqtt.hpp"
 #include "../src/hass.hpp"
@@ -12,8 +12,8 @@
 
 class MockModbusReader : public ModbusInterface {
 public:
-    std::vector<uint16_t> registers_;
-    std::vector<uint16_t> holdRegisters_;
+    mutable std::vector<uint16_t> registers_;
+    mutable std::vector<uint16_t> holdRegisters_;
     MockModbusReader(const std::vector<uint16_t> registers, const std::vector<uint16_t> holdRegisters) {
         registers_ = registers;
         holdRegisters_ = holdRegisters;
@@ -30,9 +30,18 @@ public:
     }
 
     void writeRegisters(int start_address, const std::vector<uint16_t>& values) const {
-        throw std::runtime_error("Not implemented");
+        for (size_t i=0; i<values.size(); ++i) {
+            holdRegisters_[start_address + i] = values[i];
+        }
     }
     
+};
+
+class MockModbusDeviceManagerInterface: public ModbusDeviceManagerInterface {
+public:
+    uint16_t readInputRegister(int address) { return 0; }
+    uint16_t readHoldRegister(int address) { return 0; }
+    void writeRegister(int address, uint16_t value) {}
 };
 
 class MockMqtt: public MqttInterface {
@@ -88,9 +97,9 @@ TEST_F(ModbusReaderTest, DeconstructRegisters)
         0x0190,0x00FA,0x00FA,0x0000,0x0000,0x000A,0xFF38,0x0226,0x0000,0x0190,
         0x0420,0x0000,0x0001,0x0001,0x0000,0x1774,0x0064,0xFFCE,0x0190,0x0000,
         });
-    RegisterReader rri(mmr, RegisterType::INPUT);
-    RegisterReader rrh(mmr, RegisterType::HOLDING);
-    RegistersGridBoss rgb(rri, rrh);
+
+    ModbusDeviceManager dm(mmr);
+    RegistersGridBoss rgb(dm);
 
     ASSERT_EQ(rgb.getSerial(), "5252255355");
     ASSERT_DOUBLE_EQ(rgb.geteToGridTotalL1(), 16.4);

@@ -37,7 +37,7 @@ gen/eg4-gridboss/register-post.inl: src/registers-eg4-gridboss.yaml
 gen/eg4-gridboss/register-discovery.inl: src/registers-eg4-gridboss.yaml
 	bin/run_generator.sh eg4-gridboss generate-discovery.js register-discovery.inl
 
-build/eg4-18kpv-reader: src/main.cpp src/registerReader.hpp src/registers.hpp \
+build/eg4-18kpv-reader: src/main.cpp src/modbusDeviceManager.hpp src/registers.hpp \
 		src/modbus.hpp src/mqtt.hpp src/hass.hpp \
 		gen/eg4-18kpv/register-accessors.inl gen/eg4-18kpv/register-dump.inl gen/eg4-18kpv/register-json.inl \
 		gen/eg4-18kpv/register-post.inl gen/eg4-18kpv/register-discovery.inl \
@@ -47,7 +47,7 @@ build/eg4-18kpv-reader: src/main.cpp src/registerReader.hpp src/registers.hpp \
 	bin/update-version.sh
 	g++ -DEG418KPV=1 -std=c++20 src/main.cpp -lmodbus -ljsoncpp -lpaho-mqttpp3 -lpaho-mqtt3a -lpaho-mqtt3as -o build/eg4-18kpv-reader
 
-build/gridboss-reader: src/main.cpp src/registerReader.hpp src/registers.hpp \
+build/gridboss-reader: src/main.cpp src/modbusDeviceManager.hpp src/registers.hpp \
 		src/modbus.hpp src/mqtt.hpp src/hass.hpp \
 		gen/eg4-18kpv/register-accessors.inl gen/eg4-18kpv/register-dump.inl gen/eg4-18kpv/register-json.inl \
 		gen/eg4-18kpv/register-post.inl gen/eg4-18kpv/register-discovery.inl \
@@ -57,7 +57,7 @@ build/gridboss-reader: src/main.cpp src/registerReader.hpp src/registers.hpp \
 	bin/update-version.sh
 	g++ -DGRIDBOSS=1 -std=c++20 src/main.cpp -lmodbus -ljsoncpp -lpaho-mqttpp3 -lpaho-mqtt3a -lpaho-mqtt3as -o build/gridboss-reader
 
-build/tests: tests/main.cpp src/registerReader.hpp src/registers.hpp \
+build/tests: tests/main.cpp src/modbusDeviceManager.hpp src/registers.hpp \
 		src/modbus.hpp src/mqtt.hpp src/hass.hpp \
 		gen/eg4-18kpv/register-accessors.inl gen/eg4-18kpv/register-dump.inl gen/eg4-18kpv/register-json.inl \
 		gen/eg4-18kpv/register-post.inl gen/eg4-18kpv/register-discovery.inl \

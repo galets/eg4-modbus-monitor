@@ -1,7 +1,7 @@
 #include <iostream>
 #include <time.h> 
 #include "modbus.hpp"
-#include "registerReader.hpp"
+#include "modbusDeviceManager.hpp"
 #include "registers.hpp"
 #include "mqtt.hpp"
 #include "hass.hpp"
@@ -13,28 +13,27 @@ void getAndPost(Mqtt& mqtt) {
     const time_t secondsToForceMetadataUpdate = 60 * 60 * 2; // 2 hours
 
     Modbus modbus(envOrDefault("MODBUS_PORT", "/dev/ttyUSB0"), 19200, 'N', 8, 1, 1);
-    RegisterReader registersReader(modbus, RegisterType::INPUT);
-    RegisterReader holdingRegistersReader(modbus, RegisterType::HOLDING);
-    std::unique_ptr<HassMqttDevice> inverter;
+    ModbusDeviceManager dm(modbus);
+    std::unique_ptr<HassMqttDevice> hassMqttDevice;
 #ifdef EG418KPV
-    RegistersEg418kpv r(registersReader, holdingRegistersReader);
+    RegistersEg418kpv r(dm);
     HassDevice device(r);
-    inverter.reset(new HassInverterEg418kp(r, mqtt, device));
+    hassMqttDevice.reset(new HassInverterEg418kp(r, mqtt, device));
 #elif defined(GRIDBOSS)
-    RegistersGridBoss r(registersReader, holdingRegistersReader);
+    RegistersGridBoss r(dm);
     HassDevice device(r);
-    inverter.reset(new HassGridBoss(r, mqtt, device));
+    hassMqttDevice.reset(new HassGridBoss(r, mqtt, device));
 #else
 #error Unknown device
 #endif
 
     time_t now = time(0);
     if (now > secondsToForceMetadataUpdate + lastMetadataUpdate) {
-        inverter->postDiscovery();
+        hassMqttDevice->postDiscovery();
         lastMetadataUpdate = now;
     }
 
-    inverter->postValues();
+    hassMqttDevice->postValues();
 }
 
 

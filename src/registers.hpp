@@ -1,13 +1,13 @@
 #pragma once
 
 #include <sstream>
-#include "registerReader.hpp"
+#include "modbusDeviceManager.hpp"
 
 class Registers
 {
 public:
-    Registers(const RegisterReader &reader, const RegisterReader &holdingReader) 
-        : reader_(reader), holdingReader_(holdingReader) 
+    Registers(const ModbusDeviceManagerInterface &dm) 
+        : dm_(dm) 
     {
     }
 
@@ -17,11 +17,10 @@ public:
     virtual std::string getFwVersion() const = 0;
 
 protected:
-    const RegisterReader &reader_;
-    const RegisterReader &holdingReader_;
+    const ModbusDeviceManagerInterface &dm_;
 
     uint16_t getRegister(int address) const { 
-        return reader_.getRegister(address); 
+        return dm_.readInputRegister(address); 
     }
 
     std::string getRegisterString(const std::vector<int>& addresses) const {
@@ -34,7 +33,7 @@ protected:
     }
 
     uint16_t getHoldRegister(int address) const { 
-        return holdingReader_.getRegister(address); 
+        return dm_.readHoldRegister(address); 
     }
 
     std::string getHoldRegisterString(const std::vector<int>& addresses) const {
@@ -50,8 +49,8 @@ protected:
 
 class RegistersEg418kpv: public Registers {
 public:
-    RegistersEg418kpv(const RegisterReader &reader, const RegisterReader &holdingReader) 
-        : Registers(reader, holdingReader) 
+    RegistersEg418kpv(const ModbusDeviceManagerInterface &dm) 
+        : Registers(dm) 
     {
     }
 
@@ -62,8 +61,8 @@ public:
 
 class RegistersGridBoss: public Registers {
 public:
-    RegistersGridBoss(const RegisterReader &reader, const RegisterReader &holdingReader) 
-        : Registers(reader, holdingReader) 
+    RegistersGridBoss(const ModbusDeviceManagerInterface &dm) 
+        : Registers(dm) 
     {
     }
 
