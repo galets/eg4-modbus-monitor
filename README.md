@@ -9,7 +9,7 @@ Collected data will be posted to MQTT server
 
 ```bash
 # install dependencies
-apt install git build-essential libpaho-mqttpp-dev libpaho-mqtt-dev libjsoncpp-dev libmodbus-dev nodejs yq
+apt install git build-essential libpaho-mqttpp-dev libpaho-mqtt-dev libjsoncpp-dev libmodbus-dev libgtest-dev nodejs yq
 # build
 make 18kpv
 make gridboss

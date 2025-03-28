@@ -10,14 +10,15 @@ enum class RegisterType {
     HOLDING
 };
 
-class ModbusReaderInterface {
+class ModbusInterface {
 public:
-    virtual ~ModbusReaderInterface() = default;
+    virtual ~ModbusInterface() = default;
     virtual bool isValid() const = 0;
     virtual std::vector<uint16_t> readRegisters(RegisterType type, int start_address, int num_registers) const = 0;
+    virtual void writeRegisters(int start_address, const std::vector<uint16_t>& values) const = 0;
 };
 
-class ModbusReader: public ModbusReaderInterface
+class Modbus : public ModbusInterface
 {
 public:
     /**
@@ -31,7 +32,7 @@ public:
      * @param slave_id The Modbus slave ID.
      * @throws std::runtime_error if there's an error during initialization.
      */
-    ModbusReader(const std::string& device, int baud, char parity, int data_bits, int stop_bits, int slave_id)
+    Modbus(const std::string& device, int baud, char parity, int data_bits, int stop_bits, int slave_id)
         : ctx_(modbus_new_rtu(device.c_str(), baud, parity, data_bits, stop_bits))
     {
         if (ctx_ == nullptr)
@@ -55,7 +56,7 @@ public:
      * @param slave_id The Modbus slave ID.
      * @throws std::runtime_error if there's an error during initialization.
      */
-    ModbusReader(const std::string& ip_address, int port, int slave_id)
+    Modbus(const std::string& ip_address, int port, int slave_id)
         : ctx_(modbus_new_tcp(ip_address.c_str(), port))
     {
         if (ctx_ == nullptr)
@@ -76,7 +77,7 @@ public:
      * @brief Destroy the Modbus Reader object.
      *        Closes the Modbus connection and frees the context.
      */
-    ~ModbusReader()
+    ~Modbus()
     {
         if (ctx_ != nullptr)
         {
@@ -100,14 +101,14 @@ public:
         std::vector<uint16_t> registers(num_registers);
         int rc;
         switch (type) {
-            case RegisterType::INPUT:
-                rc = modbus_read_input_registers(ctx_, start_address, num_registers, registers.data());
-                break;
-            case RegisterType::HOLDING:
-                rc = modbus_read_registers(ctx_, start_address, num_registers, registers.data());
-                break;
-            default:
-                throw std::runtime_error("Invalid register type");
+        case RegisterType::INPUT:
+            rc = modbus_read_input_registers(ctx_, start_address, num_registers, registers.data());
+            break;
+        case RegisterType::HOLDING:
+            rc = modbus_read_registers(ctx_, start_address, num_registers, registers.data());
+            break;
+        default:
+            throw std::runtime_error("Invalid register type");
         }
 
         if (rc < 0)
@@ -115,6 +116,23 @@ public:
             throw std::runtime_error("Failed to read registers");
         }
         return registers;
+    }
+
+    /**
+     * @brief Write multiple registers to the Modbus device.
+     *
+     * @param start_address The starting register address.
+     * @param values The values to write.
+     * @throws std::runtime_error if there's an error during the write operation.
+     */
+    void writeRegisters(int start_address, const std::vector<uint16_t>& values) const {
+        checkValid();
+
+        int rc = modbus_write_registers(ctx_, start_address, values.size(), values.data());
+        if (rc < 0)
+        {
+            throw std::runtime_error("Failed to write registers");
+        }
     }
 
     /**
@@ -129,7 +147,7 @@ public:
     }
 
 private:
-    modbus_t *ctx_;
+    modbus_t* ctx_;
 
     void checkValid() const
     {

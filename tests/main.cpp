@@ -10,7 +10,7 @@
 #include "../src/hass.hpp"
 #include "../src/utils.hpp"
 
-class MockModbusReader : public ModbusReaderInterface {
+class MockModbusReader : public ModbusInterface {
 public:
     std::vector<uint16_t> registers_;
     std::vector<uint16_t> holdRegisters_;
@@ -28,6 +28,11 @@ public:
         }
         return result;
     }
+
+    void writeRegisters(int start_address, const std::vector<uint16_t>& values) const {
+        throw std::runtime_error("Not implemented");
+    }
+    
 };
 
 class MockMqtt: public MqttInterface {
