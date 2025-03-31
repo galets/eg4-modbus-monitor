@@ -45,6 +45,9 @@ protected:
         return ss.str();
     }
 
+    void writeRegister(int address, uint16_t value) const {
+        dm_.writeRegister(address, value);
+    }
 };
 
 class RegistersEg418kpv: public Registers {

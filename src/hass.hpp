@@ -70,6 +70,10 @@ protected:
         return "modbus/" + device_.identifier + "/" + name;
     }
 
+    std::string getCmdTopic(const std::string& name) const {
+        return "modbus/cmd/" + device_.identifier + "/" + name;
+    }
+
     template <typename T>
     void postValue(const std::string& name, T value) const {
         std::stringstream ss;
@@ -79,11 +83,16 @@ protected:
         mqtt_.post(topic, ss.str());
     }
 
-    void postDiscoveryEntry(const std::string& name, const std::string& icon, const std::string& entity_category, 
+    void subscribe(const std::string& name, std::function<void(const std::string&)> callback) const {
+        auto topic = getCmdTopic(name);
+        mqtt_.listen(topic, callback);
+    }
+
+    void postDiscoveryEntry(const std::string& name, const std::string& icon, const std::string& component, const std::string& entity_category, 
             const std::string& unit_of_measurement, const std::string& device_class, const std::string& state_class,
-            bool enabled_by_default) const {
+            bool has_setter, bool enabled_by_default) const {
         Json::Value value;
-        value["component"] = "sensor";
+        value["component"] = component;
         value["device"] = (name == "State")? device_.toJson(): device_.toReducedJson();
         if (!device_class.empty()) {
             value["device_class"] = device_class;
@@ -103,11 +112,14 @@ protected:
             value["state_class"] = state_class;
         }
         value["state_topic"] = getTopic(name);
+        if (has_setter) {
+            value["command_topic"] = getCmdTopic(name);
+        }
         if (!enabled_by_default) {
             value["enabled_by_default"] = false;
         }
 
-        auto topic = "homeassistant/sensor/" + device_.identifier + "/" + name + "/config";
+        auto topic = "homeassistant/" + component + "/" + device_.identifier + "/" + name + "/config";
         //std::cout << "posting metadata to: " << topic << std::endl;
         mqtt_.post(topic, value.toStyledString(), true);
     }

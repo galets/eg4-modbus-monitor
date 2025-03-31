@@ -433,3 +433,17 @@
 # - item: smartPort4Status
 #   description: Smart Port 4 status
 
+- item: smartLoad1GridOn
+  component: switch
+  type: string
+  enabled_by_default: false
+  description: Smart Load 1 Grid On
+  code: >
+    return (getHoldRegister(229) & 0x0010) ? "ON" : "OFF";
+  setter: |
+    auto oldValue = getHoldRegister(229);
+    if (value == "ON") {
+      writeRegister(229, oldValue | 0x0010);
+    } else {
+      writeRegister(229, oldValue & ~0x0010);
+    }

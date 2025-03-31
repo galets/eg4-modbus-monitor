@@ -1,7 +1,9 @@
 #pragma once
 
 #include <modbus/modbus.h>
+#include <condition_variable>
 #include <iostream>
+#include <mutex>
 #include <stdexcept>
 #include <vector>
 
@@ -100,20 +102,27 @@ public:
 
         std::vector<uint16_t> registers(num_registers);
         int rc;
-        switch (type) {
-        case RegisterType::INPUT:
-            rc = modbus_read_input_registers(ctx_, start_address, num_registers, registers.data());
-            break;
-        case RegisterType::HOLDING:
-            rc = modbus_read_registers(ctx_, start_address, num_registers, registers.data());
-            break;
-        default:
-            throw std::runtime_error("Invalid register type");
+        for (int retry = 0; retry < 3; ++retry) {
+            switch (type) {
+            case RegisterType::INPUT:
+                rc = modbus_read_input_registers(ctx_, start_address, num_registers, registers.data());
+                break;
+            case RegisterType::HOLDING:
+                rc = modbus_read_registers(ctx_, start_address, num_registers, registers.data());
+                break;
+            default:
+                throw std::runtime_error("Invalid register type");
+            }
+
+            if (rc >= 0 || errno != 110) {
+                break;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
 
         if (rc < 0)
         {
-            throw std::runtime_error("Failed to read registers");
+            throw std::runtime_error("Failed to read registers, error: " + std::to_string(errno));
         }
         return registers;
     }
@@ -128,10 +137,21 @@ public:
     void writeRegisters(int start_address, const std::vector<uint16_t>& values) const {
         checkValid();
 
-        int rc = modbus_write_registers(ctx_, start_address, values.size(), values.data());
-        if (rc < 0)
-        {
-            throw std::runtime_error("Failed to write registers");
+        // Notice: modbus_write_registers fails, must write them one at a time
+        for (auto i = 0; i < values.size(); ++i) {
+            int rc;
+            for (int retry = 0; retry < 3; ++retry) {
+                rc = modbus_write_register(ctx_, start_address + i, values.at(i));
+                if (rc >= 0 || errno != 110) {
+                    break;
+                }
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            }
+            
+            if (rc < 0)
+            {
+                throw std::runtime_error("Failed to write registers, error: " + std::to_string(errno));
+            }
         }
     }
 
@@ -155,5 +175,46 @@ private:
         {
             throw std::runtime_error("Modbus context is not valid");
         }
+    }
+};
+
+class SerializedModbus : public ModbusInterface {
+private:
+    ModbusInterface& modbus_;
+    mutable std::mutex mutex_;
+    mutable std::condition_variable write_cv_;
+    mutable bool writeHappened_;
+
+public:
+    explicit SerializedModbus(ModbusInterface& modbus)
+        : modbus_(modbus) {
+    }
+
+    ~SerializedModbus() = default;
+    SerializedModbus(const SerializedModbus&) = delete;
+    SerializedModbus& operator=(const SerializedModbus&) = delete;
+    SerializedModbus(SerializedModbus&&) = delete;
+    SerializedModbus& operator=(SerializedModbus&&) = delete;
+
+    bool isValid() const {
+        return modbus_.isValid();
+    }
+
+    std::vector<uint16_t> readRegisters(RegisterType type, int start_address, int num_registers) const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        return modbus_.readRegisters(type, start_address, num_registers);
+    }
+
+    void writeRegisters(int start_address, const std::vector<uint16_t>& values) const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        modbus_.writeRegisters(start_address, values);
+        writeHappened_ = true;
+        write_cv_.notify_all();
+    }
+
+    void wait(uint32_t millisec) {
+        std::unique_lock<std::mutex> lock(mutex_);
+        writeHappened_ = false;
+        write_cv_.wait_for(lock, std::chrono::milliseconds(millisec), [this] { return writeHappened_; });
     }
 };

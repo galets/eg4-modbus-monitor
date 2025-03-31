@@ -48,4 +48,13 @@ for (let i=0; i<registers.length; i++) {
     }
     console.log("}");
     console.log("");
+
+    if (reg.setter) {
+        console.log(`void set${name}(const std::string& value) const {`);
+        for (const line of reg.setter.split('\n')) {
+            console.log(`    ${line}`);
+        }
+        console.log("}");
+        console.log("");
+    }
 }

@@ -47,6 +47,11 @@ public:
     holdCache_[address] = value;
   }
 
+  void dropCaches() {
+    inputCache_.clear();
+    holdCache_.clear();
+  }
+
 protected:
   const ModbusInterface& modbus_;
   mutable std::map<int, uint16_t> inputCache_;
