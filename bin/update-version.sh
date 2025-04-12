@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [ ! -f ".git" ] ; then
-    exit 0
+if [[ ! -d ".git" ]]; then
+    exit 1
 fi
 
 GIT_HASH=$(git rev-parse --short HEAD)
