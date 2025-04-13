@@ -52,11 +52,11 @@ Use following command line parameters to run the program:
   -h, --help                Show this help message and exit
 ```
 
-If MQTT URI is not specified, the program will fetch all available parameters from device
+If MQTT URI is not specified, the program will print all available parameters from device
 in JSON format and exit.
 
 If MQTT_URI is specified, the program will use MQTT server to post values every 10 seconds.
-Also, an (MQTT auto-discovery)[https://www.home-assistant.io/integrations/mqtt/#mqtt-discovery]
+Also, an [MQTT auto-discovery](https://www.home-assistant.io/integrations/mqtt/#mqtt-discovery)
 entries would be posted, so that Home Assistant can automatically find and configure device
 
 ### Configuration using environment values
