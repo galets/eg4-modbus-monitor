@@ -17,7 +17,7 @@ public:
     std::string sw_version;
     std::string identifier;
 
-    HassDevice(const Registers& registers, const std::string& manufacturer, const std::string& model, const std::string& name){
+    HassDevice(const Registers& registers, const std::string& manufacturer, const std::string& model, const std::string& name) {
         this->manufacturer = manufacturer;
         this->model = model;
         this->name = name;
@@ -50,11 +50,11 @@ public:
     }
 };
 
-class HassDevice18Kpv: public HassDevice {
+class HassDevice18Kpv : public HassDevice {
     const RegistersEg418kpv& registers_;
 public:
     HassDevice18Kpv(const RegistersEg418kpv& registers, const std::string& manufacturer, const std::string& model, const std::string& name) :
-        HassDevice(registers, manufacturer, model, (name == "") ? manufacturer + " " + model + " Inverter" : name), registers_(registers)  {
+        HassDevice(registers, manufacturer, model, (name == "") ? manufacturer + " " + model + " Inverter" : name), registers_(registers) {
     }
 
     Json::Value toJson() const {
@@ -64,7 +64,7 @@ public:
     }
 };
 
-class HassDeviceGridBoss: public HassDevice {
+class HassDeviceGridBoss : public HassDevice {
     const RegistersGridBoss& registers_;
 public:
     HassDeviceGridBoss(const RegistersGridBoss& registers, const std::string& manufacturer, const std::string& model, const std::string& name) :
@@ -117,12 +117,12 @@ protected:
         mqtt_.listen(topic, callback);
     }
 
-    void postDiscoveryEntry(const std::string& name, const std::string& icon, const std::string& component, const std::string& entity_category, 
-            const std::string& unit_of_measurement, const std::string& device_class, const std::string& state_class,
-            bool has_setter, bool enabled_by_default) const {
+    void postDiscoveryEntry(const std::string& name, const std::string& icon, const std::string& component, const std::string& entity_category,
+        const std::string& unit_of_measurement, const std::string& device_class, const std::string& state_class,
+        bool has_setter, bool enabled_by_default) const {
         Json::Value value;
         value["component"] = component;
-        value["device"] = (name == "State")? device_.toJson(): device_.toReducedJson();
+        value["device"] = (name == "State") ? device_.toJson() : device_.toReducedJson();
         if (!device_class.empty()) {
             value["device_class"] = device_class;
         }
@@ -154,7 +154,7 @@ protected:
     }
 };
 
-class HassInverterEg418kp: public HassMqttDevice {
+class HassInverterEg418kp : public HassMqttDevice {
 public:
     HassInverterEg418kp(const RegistersEg418kpv& registers, MqttInterface& mqtt, const HassDevice& device) :
         HassMqttDevice(mqtt, device),
@@ -173,22 +173,22 @@ private:
     const RegistersEg418kpv& registers_;
 };
 
-class HassGridBoss: public HassMqttDevice {
-    public:
-        HassGridBoss(const RegistersGridBoss& registers, MqttInterface& mqtt, const HassDevice& device) :
-            HassMqttDevice(mqtt, device),
-            registers_(registers) {
-        }
-    
-        void postValues() const {
-    #include "../gen/gridboss/post.inl"
-        }
-    
-        void postDiscovery() const {
-    #include "../gen/gridboss/discovery.inl"
-        }
-    
-    private:
-        const RegistersGridBoss& registers_;
-    };
-    
+class HassGridBoss : public HassMqttDevice {
+public:
+    HassGridBoss(const RegistersGridBoss& registers, MqttInterface& mqtt, const HassDevice& device) :
+        HassMqttDevice(mqtt, device),
+        registers_(registers) {
+    }
+
+    void postValues() const {
+#include "../gen/gridboss/post.inl"
+    }
+
+    void postDiscovery() const {
+#include "../gen/gridboss/discovery.inl"
+    }
+
+private:
+    const RegistersGridBoss& registers_;
+};
+

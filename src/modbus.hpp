@@ -147,7 +147,7 @@ public:
                 }
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
-            
+
             if (rc < 0)
             {
                 throw std::runtime_error("Failed to write registers, error: " + std::to_string(errno));

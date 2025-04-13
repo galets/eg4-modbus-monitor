@@ -64,14 +64,14 @@ Environment variables can be used to set default values.
 Config parse_command_line(int argc, char* argv[]) {
     Config config;
 
-    config.mqtt_uri           = get_env_var("MQTT_URI");
-    config.mqtt_username      = get_env_var("MQTT_USERNAME");
-    config.mqtt_password      = get_env_var("MQTT_PASSWORD");
-    config.mqtt_client_id     = get_env_var("MQTT_CLIENT_ID", "eg4-modbus-reader");
-    config.modbus_port        = get_env_var("MODBUS_PORT", "/dev/ttyUSB0");
-    config.device_manufacturer= get_env_var("DEVICE_MANUFACTURER", "EG4");
-    config.device_model       = get_env_var("DEVICE_MODEL");
-    config.device_name        = get_env_var("DEVICE_NAME");
+    config.mqtt_uri = get_env_var("MQTT_URI");
+    config.mqtt_username = get_env_var("MQTT_USERNAME");
+    config.mqtt_password = get_env_var("MQTT_PASSWORD");
+    config.mqtt_client_id = get_env_var("MQTT_CLIENT_ID", "eg4-modbus-reader");
+    config.modbus_port = get_env_var("MODBUS_PORT", "/dev/ttyUSB0");
+    config.device_manufacturer = get_env_var("DEVICE_MANUFACTURER", "EG4");
+    config.device_model = get_env_var("DEVICE_MODEL");
+    config.device_name = get_env_var("DEVICE_NAME");
 
     enum {
         OPT_MQTT_URI = 1000,
@@ -106,34 +106,35 @@ Config parse_command_line(int argc, char* argv[]) {
     opterr = 0;
     while ((opt = getopt_long(argc, argv, short_opts, long_options, &option_index)) != -1) {
         switch (opt) {
-            case OPT_MQTT_URI:            config.mqtt_uri = optarg; break;
-            case OPT_MQTT_USERNAME:       config.mqtt_username = optarg; break;
-            case OPT_MQTT_PASSWORD:       config.mqtt_password = optarg; break;
-            case OPT_MQTT_CLIENT_ID:      config.mqtt_client_id = optarg; break;
-            case OPT_MODBUS_PORT:         config.modbus_port = optarg; break;
-            case OPT_DEVICE_MANUFACTURER: config.device_manufacturer = optarg; break;
-            case OPT_DEVICE_MODEL:        config.device_model = optarg; break;
-            case OPT_DEVICE_NAME:         config.device_name = optarg; break;
-            case 'h':
-                print_usage(argv[0]);
-                exit(EXIT_SUCCESS);
-            case 'v':
-                config.verbose = true;
-                break;
-            case 'n':
-                config.header = false;
-                break;
-            case '?':
-                if (optopt == 0) {
-                    std::cerr << "Error: Unknown option or missing argument for '" << argv[optind - 1] << "'.\n";
-                } else {
-                    std::cerr << "Error: Unknown option '-" << (char)optopt << "' or missing argument.\n";
-                }
-                print_usage(argv[0]);
-                exit(EXIT_FAILURE);
-            default: // Should not happen
-                std::cerr << "Error: Unexpected getopt_long return value: " << opt << "\n";
-                exit(EXIT_FAILURE);
+        case OPT_MQTT_URI:            config.mqtt_uri = optarg; break;
+        case OPT_MQTT_USERNAME:       config.mqtt_username = optarg; break;
+        case OPT_MQTT_PASSWORD:       config.mqtt_password = optarg; break;
+        case OPT_MQTT_CLIENT_ID:      config.mqtt_client_id = optarg; break;
+        case OPT_MODBUS_PORT:         config.modbus_port = optarg; break;
+        case OPT_DEVICE_MANUFACTURER: config.device_manufacturer = optarg; break;
+        case OPT_DEVICE_MODEL:        config.device_model = optarg; break;
+        case OPT_DEVICE_NAME:         config.device_name = optarg; break;
+        case 'h':
+            print_usage(argv[0]);
+            exit(EXIT_SUCCESS);
+        case 'v':
+            config.verbose = true;
+            break;
+        case 'n':
+            config.header = false;
+            break;
+        case '?':
+            if (optopt == 0) {
+                std::cerr << "Error: Unknown option or missing argument for '" << argv[optind - 1] << "'.\n";
+            }
+            else {
+                std::cerr << "Error: Unknown option '-" << (char)optopt << "' or missing argument.\n";
+            }
+            print_usage(argv[0]);
+            exit(EXIT_FAILURE);
+        default: // Should not happen
+            std::cerr << "Error: Unexpected getopt_long return value: " << opt << "\n";
+            exit(EXIT_FAILURE);
         }
     }
 
@@ -180,27 +181,32 @@ int main(int argc, char* argv[])
             auto r = new RegistersEg418kpv(dm);
             registers.reset(r);
             device.reset(new HassDevice18Kpv(*r, config.device_manufacturer, config.device_model, config.device_name));
-        } else if (device_model_lower == "gridboss") {
+        }
+        else if (device_model_lower == "gridboss") {
             auto r = new RegistersGridBoss(dm);
             registers.reset(r);
             device.reset(new HassDeviceGridBoss(*r, config.device_manufacturer, config.device_model, config.device_name));
-        } else {
+        }
+        else {
             throw std::runtime_error("Unknown device model: " + config.device_model);
         }
 
-        if (config.mqtt_uri == "") {            
+        if (config.mqtt_uri == "") {
             std::cout << device->toJson() << std::endl;
             return 0;
-        } else {
+        }
+        else {
             Mqtt mqtt(config.mqtt_uri, config.mqtt_username, config.mqtt_password, config.mqtt_client_id);
             std::unique_ptr<HassMqttDevice> hassMqttDevice;
             if (device_model_lower == "18kpv") {
                 hassMqttDevice.reset(new HassInverterEg418kp(dynamic_cast<RegistersEg418kpv&>(*registers), mqtt, *device));
-            } else if (device_model_lower == "gridboss") {
+            }
+            else if (device_model_lower == "gridboss") {
                 hassMqttDevice.reset(new HassGridBoss(dynamic_cast<RegistersGridBoss&>(*registers), mqtt, *device));
-            } else {
+            }
+            else {
                 throw std::runtime_error("Unknown device model: " + config.device_model);
-            } 
+            }
 
             static time_t lastMetadataUpdate = 0;
             const time_t secondsToForceMetadataUpdate = 60 * 60 * 2; // 2 hours

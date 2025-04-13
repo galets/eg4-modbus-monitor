@@ -6,8 +6,8 @@
 class Registers
 {
 public:
-    Registers(const ModbusDeviceManagerInterface &dm) 
-        : dm_(dm) 
+    Registers(const ModbusDeviceManagerInterface& dm)
+        : dm_(dm)
     {
     }
 
@@ -17,30 +17,30 @@ public:
     virtual std::string getFwVersion() const = 0;
 
 protected:
-    const ModbusDeviceManagerInterface &dm_;
+    const ModbusDeviceManagerInterface& dm_;
 
-    uint16_t getRegister(int address) const { 
-        return dm_.readInputRegister(address); 
+    uint16_t getRegister(int address) const {
+        return dm_.readInputRegister(address);
     }
 
     std::string getRegisterString(const std::vector<int>& addresses) const {
         std::stringstream ss;
         for (auto addr : addresses) {
             int16_t value = getRegister(addr);
-            ss << (char) (value & 0x00FF) << (char) (value >> 8);
+            ss << (char)(value & 0x00FF) << (char)(value >> 8);
         }
         return ss.str();
     }
 
-    uint16_t getHoldRegister(int address) const { 
-        return dm_.readHoldRegister(address); 
+    uint16_t getHoldRegister(int address) const {
+        return dm_.readHoldRegister(address);
     }
 
     std::string getHoldRegisterString(const std::vector<int>& addresses) const {
         std::stringstream ss;
         for (auto addr : addresses) {
             int16_t value = getHoldRegister(addr);
-            ss << (char) (value & 0x00FF) << (char) (value >> 8);
+            ss << (char)(value & 0x00FF) << (char)(value >> 8);
         }
         return ss.str();
     }
@@ -50,10 +50,10 @@ protected:
     }
 };
 
-class RegistersEg418kpv: public Registers {
+class RegistersEg418kpv : public Registers {
 public:
-    RegistersEg418kpv(const ModbusDeviceManagerInterface &dm) 
-        : Registers(dm) 
+    RegistersEg418kpv(const ModbusDeviceManagerInterface& dm)
+        : Registers(dm)
     {
     }
 
@@ -62,10 +62,10 @@ public:
 
 };
 
-class RegistersGridBoss: public Registers {
+class RegistersGridBoss : public Registers {
 public:
-    RegistersGridBoss(const ModbusDeviceManagerInterface &dm) 
-        : Registers(dm) 
+    RegistersGridBoss(const ModbusDeviceManagerInterface& dm)
+        : Registers(dm)
     {
     }
 
