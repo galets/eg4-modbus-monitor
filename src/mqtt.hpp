@@ -19,13 +19,6 @@ class Mqtt : public MqttInterface
 {
 
 public:
-    Mqtt() : Mqtt(envOrDefault("MQTT_URI", "tcp://localhost:1883"),
-                  envOrDefault("MQTT_USERNAME", ""),
-                  envOrDefault("MQTT_PASSWORD", ""),
-                  envOrDefault("MQTT_CLIENT_ID", "modbus-local-reader"))
-    {
-    }
-
     Mqtt(const std::string &serverUri,
          const std::string &username,
          const std::string &password,

@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <cstdlib>
 #include <cctype>
 #include <iomanip>
@@ -9,7 +8,8 @@
 
 // requires libjsoncpp-dev
 
-struct HassDevice {
+class HassDevice {
+public:
     std::string manufacturer;
     std::string name;
     std::string model;
@@ -17,17 +17,18 @@ struct HassDevice {
     std::string sw_version;
     std::string identifier;
 
-    HassDevice(const Registers& registers) {
-        manufacturer = envOrDefault("DEVICE_MANUFACTURER", "EG4");
-        model = envOrError("DEVICE_MODEL");
-        name = envOrDefault("DEVICE_NAME", manufacturer + " " + model + " Inverter");
+    HassDevice(const Registers& registers, const std::string& manufacturer, const std::string& model, const std::string& name){
+        this->manufacturer = manufacturer;
+        this->model = model;
+        this->name = name;
         serial = registers.getSerial();
         sw_version = registers.getFwVersion();
-        identifier = manufacturer + "_" + model + "_" + serial;
-        std::transform(identifier.begin(), identifier.end(), identifier.begin(), [](unsigned char c) { return std::tolower(c); });
+        identifier = to_lower(this->manufacturer + "_" + this->model + "_" + serial);
     }
 
-    Json::Value toJson() const {
+    virtual ~HassDevice() = default;
+
+    virtual Json::Value toJson() const {
         Json::Value json;
         json["manufacturer"] = manufacturer;
         json["name"] = name;
@@ -49,6 +50,35 @@ struct HassDevice {
     }
 };
 
+class HassDevice18Kpv: public HassDevice {
+    const RegistersEg418kpv& registers_;
+public:
+    HassDevice18Kpv(const RegistersEg418kpv& registers, const std::string& manufacturer, const std::string& model, const std::string& name) :
+        HassDevice(registers, manufacturer, model, (name == "") ? manufacturer + " " + model + " Inverter" : name), registers_(registers)  {
+    }
+
+    Json::Value toJson() const {
+        Json::Value json = HassDevice::toJson();
+#include "../gen/18kpv/json.inl"
+        return json;
+    }
+};
+
+class HassDeviceGridBoss: public HassDevice {
+    const RegistersGridBoss& registers_;
+public:
+    HassDeviceGridBoss(const RegistersGridBoss& registers, const std::string& manufacturer, const std::string& model, const std::string& name) :
+        HassDevice(registers, manufacturer, model, (name == "") ? manufacturer + " " + model : name), registers_(registers) {
+    }
+
+    Json::Value toJson() const {
+        Json::Value json = HassDevice::toJson();
+#include "../gen/gridboss/json.inl"
+        return json;
+    }
+};
+
+
 class HassMqttDevice {
 public:
     HassMqttDevice(MqttInterface& mqtt, const HassDevice& device) :
@@ -57,7 +87,6 @@ public:
     }
 
     virtual ~HassMqttDevice() = default;
-    virtual Json::Value toJson() const = 0;
     virtual void postValues() const = 0;
     virtual void postDiscovery() const = 0;
 
@@ -132,12 +161,6 @@ public:
         registers_(registers) {
     }
 
-    Json::Value toJson() const {
-        Json::Value json;
-#include "../gen/18kpv/json.inl"
-        return json;
-    }
-
     void postValues() const {
 #include "../gen/18kpv/post.inl"
     }
@@ -155,12 +178,6 @@ class HassGridBoss: public HassMqttDevice {
         HassGridBoss(const RegistersGridBoss& registers, MqttInterface& mqtt, const HassDevice& device) :
             HassMqttDevice(mqtt, device),
             registers_(registers) {
-        }
-    
-        Json::Value toJson() const {
-            Json::Value json;
-    #include "../gen/gridboss/json.inl"
-            return json;
         }
     
         void postValues() const {
