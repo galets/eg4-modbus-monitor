@@ -134,16 +134,16 @@ public:
 
     Json::Value toJson() const {
         Json::Value json;
-#include "../gen/eg4-18kpv/register-json.inl"
+#include "../gen/18kpv/json.inl"
         return json;
     }
 
     void postValues() const {
-#include "../gen/eg4-18kpv/register-post.inl"
+#include "../gen/18kpv/post.inl"
     }
 
     void postDiscovery() const {
-#include "../gen/eg4-18kpv/register-discovery.inl"
+#include "../gen/18kpv/discovery.inl"
     }
 
 private:
@@ -159,16 +159,16 @@ class HassGridBoss: public HassMqttDevice {
     
         Json::Value toJson() const {
             Json::Value json;
-    #include "../gen/eg4-gridboss/register-json.inl"
+    #include "../gen/gridboss/json.inl"
             return json;
         }
     
         void postValues() const {
-    #include "../gen/eg4-gridboss/register-post.inl"
+    #include "../gen/gridboss/post.inl"
         }
     
         void postDiscovery() const {
-    #include "../gen/eg4-gridboss/register-discovery.inl"
+    #include "../gen/gridboss/discovery.inl"
         }
     
     private:

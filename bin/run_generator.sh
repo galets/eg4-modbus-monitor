@@ -12,4 +12,4 @@ if [ "${json:0:1}" != '[' ] ; then
     echo "   pip install yq"
     exit 1
 fi
-node bin/$2 "$json" >gen/$1/$3
+node bin/generate/$2 "$json" >gen/$1/$2.inl

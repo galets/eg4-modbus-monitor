@@ -58,7 +58,7 @@ public:
     }
 
 
-#include "../gen/eg4-18kpv/register-accessors.inl"
+#include "../gen/18kpv/accessors.inl"
 
 };
 
@@ -70,6 +70,6 @@ public:
     }
 
 
-#include "../gen/eg4-gridboss/register-accessors.inl"
+#include "../gen/gridboss/accessors.inl"
 
 };
