@@ -94,6 +94,7 @@ public:
 protected:
     MqttInterface& mqtt_;
     const HassDevice& device_;
+    mutable std::map<std::string, std::string> values_;
 
     std::string getTopic(const std::string& name) const {
         return "modbus/" + device_.identifier + "/" + name;
@@ -108,8 +109,12 @@ protected:
         std::stringstream ss;
         ss << std::fixed << std::setprecision(2) << value;
         auto topic = getTopic(name);
-        std::cout << "posting to: " << topic << ": " << ss.str() << std::endl;
-        mqtt_.post(topic, ss.str());
+        auto valueStr = ss.str();
+        if (values_.find(name) == values_.end() || values_[name] != valueStr) {
+            std::cout << "posting to: " << topic << ": " << valueStr << std::endl;
+        }
+        values_[name] = valueStr;
+        mqtt_.post(topic, valueStr);
     }
 
     void subscribe(const std::string& name, std::function<void(const std::string&)> callback) const {
