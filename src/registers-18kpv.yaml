@@ -594,3 +594,30 @@
 #   unit: °C
 #   multiply: 0.1
 #   description: Reserved
+
+# - item: ACChgPowerCMD
+#   component: number
+#   attributes:
+#     min: 0
+#     max: 100
+#     step: 1
+#     mode: slider
+#   enabled_by_default: true
+#   description: AC Charging Starts (%)
+#   code: >
+#     auto hr = getHoldRegister(66);
+#     std::cerr << "Hold 66: " << hr << std::endl;
+#     return hr;
+#   setter: writeRegister(66, std::stoul(value));
+
+- item: ACChgSOCLimit
+  component: number
+  attributes:
+    min: 0
+    max: 100
+    step: 5
+    mode: box
+  enabled_by_default: true
+  description: AC Charging Stops (%)
+  code: return getHoldRegister(67);
+  setter: writeRegister(67, std::stoul(value));

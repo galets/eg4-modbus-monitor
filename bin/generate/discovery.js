@@ -24,6 +24,7 @@ for (let i=0; i<registers.length; i++) {
     let state_class = reg.state_class ? reg.state_class : "";
     let has_setter = reg.setter === undefined ? false : true;
     let enabled_by_default = reg.enabled_by_default === undefined ? true : reg.enabled_by_default;
+    let attributes = reg.attributes ? JSON.stringify(reg.attributes) : "";
 
-    console.log(`postDiscoveryEntry("${name}", "${icon}", "${component}", "${entity_category}", "${unit}", "${device_class}", "${state_class}", ${has_setter}, ${enabled_by_default});`);
+    console.log(`postDiscoveryEntry("${name}", "${icon}", "${component}", "${entity_category}", "${unit}", "${device_class}", "${state_class}", ${has_setter}, ${enabled_by_default}, R"(${attributes})" );`);
 }

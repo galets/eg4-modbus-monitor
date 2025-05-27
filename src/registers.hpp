@@ -46,6 +46,7 @@ protected:
     }
 
     void writeRegister(int address, uint16_t value) const {
+        std::cout << "writing register (" << address << "): " << value << std::endl;
         dm_.writeRegister(address, value);
     }
 };

@@ -124,8 +124,13 @@ protected:
 
     void postDiscoveryEntry(const std::string& name, const std::string& icon, const std::string& component, const std::string& entity_category,
         const std::string& unit_of_measurement, const std::string& device_class, const std::string& state_class,
-        bool has_setter, bool enabled_by_default) const {
+        bool has_setter, bool enabled_by_default, const std::string& attributes) const {
+
         Json::Value value;
+        if (!attributes.empty() && !Json::CharReaderBuilder().newCharReader()->parse(attributes.c_str(), attributes.c_str() + attributes.length(), &value, nullptr)) {
+            throw std::runtime_error("Failed to parse JSON: " + attributes);
+        }
+
         value["component"] = component;
         value["device"] = (name == "State") ? device_.toJson() : device_.toReducedJson();
         if (!device_class.empty()) {
