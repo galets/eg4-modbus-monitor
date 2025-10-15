@@ -102,7 +102,9 @@ public:
 
         std::vector<uint16_t> registers(num_registers);
         int rc;
-        for (int retry = 0; retry < 3; ++retry) {
+        bool reset_tried = false;
+        const int MAXRETRIES = 3;
+        for (int retry = 0; retry < MAXRETRIES; ++retry) {
             switch (type) {
             case RegisterType::INPUT:
                 rc = modbus_read_input_registers(ctx_, start_address, num_registers, registers.data());
@@ -114,10 +116,28 @@ public:
                 throw std::runtime_error("Invalid register type");
             }
 
-            if (rc >= 0 || errno != 110) {
-                break;
+            if (rc >= 0) {
+                break; // Success
+            } 
+
+            if (errno != 110 && errno != EMBBADCRC) {
+                break; // Non-retryable error
             }
+
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+            // Flush the input buffer to clear any stale data
+            modbus_flush(ctx_);
+            
+            // After last retry, try resetting the connection once
+            if (retry == MAXRETRIES - 1 && !reset_tried) {
+                modbus_close(ctx_);
+                if (modbus_connect(ctx_) == -1) {
+                    throw std::runtime_error("Failed to reconnect to Modbus device");
+                }
+                reset_tried = true;
+                retry = -1; // Reset retry counter
+            }
         }
 
         if (rc < 0)
@@ -126,6 +146,7 @@ public:
         }
         return registers;
     }
+
 
     /**
      * @brief Write multiple registers to the Modbus device.
