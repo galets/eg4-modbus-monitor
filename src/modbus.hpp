@@ -116,9 +116,13 @@ public:
                 throw std::runtime_error("Invalid register type");
             }
 
-            if (rc >= 0) break; // Success
+            if (rc >= 0) {
+                break; // Success
+            } 
 
-            if (errno != 110 && errno != EMBBADCRC) break; // Non-retryable error
+            if (errno != 110 && errno != EMBBADCRC) {
+                break; // Non-retryable error
+            }
 
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
