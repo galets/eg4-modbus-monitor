@@ -79,3 +79,9 @@ export DEVICE_MODEL=gridboss
 export DEVICE_NAME="EG4 GridBOSS"
 build/eg4-modbus-reader 
 ```
+
+## Contact
+
+This project will be maintained on github at https://github.com/galets/eg4-modbus-monitor
+
+Discussion group will be available on Telegram at https://t.me/eg4modbus
