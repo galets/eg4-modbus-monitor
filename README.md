@@ -5,6 +5,10 @@ specifically tested on 18kPv
 
 Collected data will be posted to MQTT server
 
+**NOTE**: This project is no longer under active development, as it is superceded by
+[eg4 dongle](https://github.com/galets/eg4-dongle) project providing much better integration with
+Home Assistant without a need to support additional hardware
+
 ## Build
 
 ```bash
